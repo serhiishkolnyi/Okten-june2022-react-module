@@ -1,0 +1,10 @@
+.postContainer {
+    width: 90%;
+    margin: 0 auto;
+    padding: 15px 5px;
+    border-bottom: 1px solid silver;
+}
+
+.postTitle{
+    font-weight: bold;
+}
