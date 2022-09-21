@@ -1,0 +1,25 @@
+.carFormContainer {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.input {
+    width: 250px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.button {
+    width: 200px;
+    margin: 5px 5px 5px 30px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.carFormContainer span{
+    width: 85%;
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
