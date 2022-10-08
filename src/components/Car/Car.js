@@ -1,24 +1,14 @@
 import React from 'react';
+import {useDispatch} from "react-redux";
 
 import css from './Car.module.css'
-import {carService} from "../../services";
+import {carActions} from "../../redux";
 
-const Car = ({car, setCars, setCarUpdate}) => {
+const Car = ({car}) => {
     const {id, model, price, year} = car;
 
-    const deleteCar = async (id) => {
-        await carService.deleteCar(id);
-        setCars(cars => {
-            const carId = cars.findIndex(value => value.id === id);
-            cars.splice(carId, 1);
-            return [...cars];
-        });
+    const dispatch = useDispatch();
 
-    };
-
-    const updateCar = () => {
-        setCarUpdate(car);
-    }
     return (
         <div className={css.carContainer}>
             <div>
@@ -28,8 +18,8 @@ const Car = ({car, setCars, setCarUpdate}) => {
                 <p>year: {year}</p>
             </div>
             <div>
-                <button onClick={() => updateCar()}>update</button>
-                <button onClick={() => deleteCar(id)}>delete</button>
+                <button onClick={()=> dispatch(carActions.setCurrentCar(car))}>update</button>
+                <button onClick={()=> dispatch(carActions.deleteById(id))}>delete</button>
             </div>
         </div>
     );

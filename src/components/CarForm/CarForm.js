@@ -1,44 +1,43 @@
 import React, {useEffect} from 'react';
 import {useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
+import {useDispatch, useSelector} from "react-redux";
 
 import css from './CarForms.module.css'
-import {carService} from "../../services";
 import {carValidator} from "../../validators";
+import {carActions} from "../../redux";
 
-const CarForm = ({setCars, carUpdate, setCarUpdate}) => {
+const CarForm = () => {
 
     const {register, handleSubmit, reset, setValue, formState: {errors, isValid}} = useForm({
         resolver: joiResolver(carValidator),
         mode: "all"
     });
 
+    const dispatch = useDispatch();
+    const {currentCar} = useSelector(state => state.carReducer);
+    console.log(currentCar)
+
     useEffect(() => {
 
-        if (carUpdate) {
-            setValue('model', carUpdate.model, {shouldValidate: true});
-            setValue('price', carUpdate.price, {shouldValidate: true});
-            setValue('year', carUpdate.year, {shouldValidate: true});
+        if (currentCar) {
+            setValue('model', currentCar.model, {shouldValidate: true});
+            setValue('price', currentCar.price, {shouldValidate: true});
+            setValue('year', currentCar.year, {shouldValidate: true});
         }
-    }, [carUpdate, setValue])
+    }, [currentCar])
 
     const onSubmit = async (car) => {
-        if (carUpdate) {
-            const {data} = await carService.updateCar(carUpdate.id, car);
-            setCars((cars)=> {
-                const findCars = cars.find(value => value.id === carUpdate.id);
-                Object.assign(findCars, data);
-                setCarUpdate(null);
-                return [...cars];
-            })
+
+        if (currentCar !== null) {
+            const id = currentCar.id;
+            dispatch(carActions.updateCar({id, car}));
+
         } else {
-            const {data} = await carService.createCar(car);
-            setCars(cars => [...cars, data])
+            dispatch(carActions.createCar({car}));
         }
         reset();
     };
-
-
 
 
     return (
@@ -57,7 +56,7 @@ const CarForm = ({setCars, carUpdate, setCarUpdate}) => {
                        placeholder={'year'} {...register('year', {valueAsNumber: true})} />
                 {errors.year && <span>{errors.year.message}</span>}
 
-                <button className={css.button} disabled={!isValid}>{carUpdate ? 'update' : 'save'}</button>
+                <button className={css.button} disabled={!isValid}>{currentCar ? 'update' : 'save'}</button>
 
             </form>
 

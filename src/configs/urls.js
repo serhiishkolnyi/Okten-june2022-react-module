@@ -1,4 +1,6 @@
-const baseURL = 'http://owu.linkpc.net/api/v2';
+import {API} from "./config";
+
+const baseURL = API;
 
 const urls = {
     cars: '/cars'
